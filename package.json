@@ -1,0 +1,41 @@
+{
+  "name": "@systemdesignpartners/cognito-hoc",
+  "version": "1.0.12",
+  "description": "Higher Order Component for ReactJS that provides Authentication via the Cognito Hosted UI",
+  "main": "build/index.js",
+  "scripts": {
+    "start": "webpack --watch",
+    "build": "webpack"
+  },
+  "author": "System Design Partners<contact@sdpartners.com> (https://sdpartners.com)",
+  "license": "MIT",
+  "peerDependencies": {
+    "@systemdesignpartners/cognito-auth-storage": "^1.0.11"
+  },
+  "dependencies": {
+    "aws-amplify": "^1.1.28",
+    "aws-amplify-react": "^2.3.8",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-loading-overlay": "^1.0.1"
+  },
+  "homepage": "https://github.com/systemdesignpartners/cognito-hoc#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/systemdesignpartners/cognito-hoc.git"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-transform-react-jsx": "^7.0.0",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.0.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.34.0",
+    "webpack-cli": "^3.0.4"
+  }
+}
