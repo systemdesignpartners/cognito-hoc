@@ -53,11 +53,9 @@ const withCognitoHUI = (WrappedComponent = null, inAmplifyConfig = null, inMode 
             // Check the current user when the App component is loaded
             await Auth.currentAuthenticatedUser({ bypassCache: true }).then((user) => {
               const { authState } = this.state;
-              if (authState === 'signedIn') {
-                console.log(
-                  "We can skip setting authState to 'signedIn' because it already is. Probably this was a manual reload by the user for some reason.",
-                );
-              } else {
+              // if (authState === 'signedIn') We can skip setting authState to 'signedIn' because it already is.
+              //   Probably this was a manual page reload by the user
+              if (authState !== 'signedIn') {
                 this.setState({ authState: 'signedIn' });
               }
             }).catch((e) => {
@@ -175,11 +173,9 @@ const withCognitoHUI = (WrappedComponent = null, inAmplifyConfig = null, inMode 
       // check the current user when the App component is loaded
       Auth.currentAuthenticatedUser().then((user) => {
         const { authState } = this.state;
-        if (authState === 'signedIn') {
-          console.log(
-            "We can skip setting authState to 'signedIn' because it already is. Probably this was a manual reload by the user for some reason.",
-          );
-        } else {
+        // if (authState === 'signedIn') We can skip setting authState to 'signedIn' because it already is.
+        //  Probably this was a manual page reload by the user
+        if (authState !== 'signedIn') {
           this.setState({ authState: 'signedIn' });
         }
       }).catch((e) => {
@@ -298,7 +294,7 @@ const withCognitoHUI = (WrappedComponent = null, inAmplifyConfig = null, inMode 
       Auth.signOut().then(() => {
         this.setState({ authState: 'mustSignIn' });
       }).catch((e) => {
-        console.log(`signOut() error is: ${e}`);
+        console.log(`Error on signout! signOut() error is: ${e}`);
       });
     }
 
