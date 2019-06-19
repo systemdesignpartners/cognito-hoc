@@ -148,18 +148,6 @@ const withCognitoHUI = (WrappedComponent = null, inAmplifyConfig = null, inMode 
       );
 
       this.trulyLoadingDiv = <div className="cognitoHocLoading">{this.loadingOverlay}</div>;
-
-
-      // If we are ready to login, go to the Hosted UI (if mode === 'timer'), or display the
-      // Sign In button (if mode === 'button').
-      // If mode === 'button' this is where we would display the unprotected content
-      let whichLoginConfig;
-      if (inMode === 'timer') {
-        whichLoginConfig = <div className="cognitoHocLoading">{this.loadingOverlay}</div>;
-      } else { // proceed on the basis of the default === 'button'
-        whichLoginConfig = <div className="cognitoHocLogin">{this.signInButton()}</div>;
-      }
-      this.headedToLoginDiv = whichLoginConfig;
     }
 
 
@@ -317,18 +305,30 @@ const withCognitoHUI = (WrappedComponent = null, inAmplifyConfig = null, inMode 
         // Until this happens, we cannot Authorize and so we do not know what to display.
         return (<div>{this.trulyLoadingDiv}</div>);
       }
+
       // Display depending on authState and whether we have an OAuthSignIn yet.
-      // We only send authStorageInfo so our WrappedComponent can display it. In real life you likely
-      // would have no use for this.
+      // First clause is for when we are truly Loading, Second is for when we think we are 
+      // Heading to the Login screen, Third is for when we know that we are truly SignedIn.
       return (
         <div>
           {((authState === 'loading') || (authState !== 'signedIn' && !OAuthSignIn)) && this.trulyLoadingDiv}
-          {authState !== 'signedIn' && OAuthSignIn && this.headedToLoginDiv}
+
+          {authState !== 'signedIn' && OAuthSignIn && (
+            (inMode === 'timer') ? (
+              <div className="cognitoHocLoading">{this.loadingOverlay}</div>
+            ) : (
+              <div className="cognitoHocLogin">
+                {this.signInButton()}
+                <WrappedComponent userIsLoggedIn='false' authStorageInfo={authStorageInfo} {...wrappedComponentProps} />
+              </div>
+            )
+          )}
+
           {authState === 'signedIn' && (
-          <div className="cognitoHocWrapper">
-            {this.signOutButton()}
-            <WrappedComponent authStorageInfo={authStorageInfo} {...wrappedComponentProps} />
-          </div>
+            <div className="cognitoHocWrapper">
+              {this.signOutButton()}
+              <WrappedComponent userIsLoggedIn='true' authStorageInfo={authStorageInfo} {...wrappedComponentProps} />
+            </div>
           )}
         </div>
       );

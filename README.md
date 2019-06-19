@@ -7,7 +7,7 @@ The withCognitoHUI component can be used to wrap a typical React <App> component
 
 **TBD HYPERLINK TO SDPARTNERS.COM ARTICLE**
 
-for an example of how to do that.
+for a discussion on how to do that.
 
 Typical usage in the frontend is within App.js:
 ```javascript
@@ -26,6 +26,8 @@ And then index.js remains the usual:
 ```javascript
 ReactDOM.render(<MyApp myProp1="TestProp1" myProp2="Test Prop 2" />, document.getElementById('root'));
 ```
+
+The withCognitoHUI component passes an all-important prop, **userIsLoggedIn**, which when 'true' (a string) indicates that it is safe for the wrapped component (MyApp) to display the protected content. At all other times, it is not safe to display protected content because the user is not Authenticated.
 
 
 ## Details
@@ -52,9 +54,9 @@ If mode is 'timer', inDelay is the number of milliseconds the timer will wait. S
 
 The inMode property refers to the behavior of the HOC control when state indicates that authentication is required.
 
-The 'button' mode means that in such cases, we will require the User to manually click a button to reach the Hosted UI login screen.
+The 'button' mode means that in such cases, we will require the User to manually click a button to reach the Hosted UI login screen. Typically a wrapped component will render unprotected content when the User is not logged in.
 
-The 'timer' mode means that in such cases, we will wait for a certain time before automatically redirecting the User to the Hosted UI. This wait is needed because as of mid-2019, Amplify cannot immediately detect that the User has successfully logged in (this happens not only for Social providers but for Cognito User Pools as well). Thus without requiring a 'button', there is no feasible way to redirect the User to the Hosted UI without risking the chance that he or she is already logged in, hence creating an "infinite UI loop" where a User logs in, and then is again redirected to the Hosted UI. This time delay (implemented via Amplify Hub, which is the preferred way to interact with the Hosted UI), is usually between 700-800 ms on a typical network connection. The wait in milliseconds is configured via the inDelay property of this HOC. The default is 1000. It is worth noting that if the default is exceeded, the infinite UI looping will occur, so be conservative in adjusting this.
+The 'timer' mode means that in such cases, we will wait for a certain time before automatically redirecting the User to the Hosted UI. Typically the wrapped component will have no unprotected content to display, though a brief splash screen might be useful. The wait time is needed because as of mid-2019, Amplify cannot immediately detect that the User has successfully logged in (this happens not only for Social providers but for Cognito User Pools as well). Thus without requiring a 'button', there is no feasible way to redirect the User to the Hosted UI without risking the chance that he or she is already logged in, hence creating an "infinite UI loop" where a User logs in, and then is again redirected to the Hosted UI. This time delay (implemented via Amplify Hub, which is the preferred way to interact with the Hosted UI), is usually between 700-800 ms on a typical network connection. The wait in milliseconds is configured via the inDelay property of this HOC. The default is around 1500ms. It is worth noting that if the default is exceeded, the infinite UI looping will occur for as long as that condition persists, so be conservative in adjusting this.
 
 Typically, 'button' mode is fine for apps with meaningful unprotected content. For such apps, the UX of having to click another button before being redirected to a proper Sign Up / Sign In page is not uncommon. However for apps that need to Authenticate the User immediately, the 'button' UX is probably more annoying than the 'timer' UX.
 
