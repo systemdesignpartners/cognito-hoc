@@ -159,7 +159,6 @@ const withCognitoHUI = (WrappedComponent = null, UnsecuredComponent = null, inAm
       } else { // proceed on the basis of the default === 'button'
         whichLoginConfig = <div className="cognitoHocLogin">
           {this.signInButton()}
-          <UnsecuredComponent />
         </div>;
       }
       this.headedToLoginDiv = whichLoginConfig;

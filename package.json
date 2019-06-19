@@ -1,6 +1,6 @@
 {
   "name": "@systemdesignpartners/cognito-hoc",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "Higher Order Component for ReactJS that provides Authentication via the Cognito Hosted UI",
   "main": "build/index.js",
   "scripts": {
