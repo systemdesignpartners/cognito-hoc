@@ -6,7 +6,7 @@ import ReactLoadingOverlay from 'react-loading-overlay';
 import { AuthStorageIDB } from '@systemdesignpartners/cognito-auth-storage';
 
 
-const withCognitoHUI = (WrappedComponent = null, inAmplifyConfig = null, inMode = 'button', inDelay = 1500) => {
+const withCognitoHUI = (WrappedComponent = null, UnsecuredComponent = null, inAmplifyConfig = null, inMode = 'button', inDelay = 1500) => {
   // Make sure we can configure Amplify
   if (!inAmplifyConfig) {
     const errMsg = "Must supply an Amplify config file (e.g. 'awsmobile', 'awsconfig', aka aws-exports.js. Exiting.";
@@ -151,13 +151,16 @@ const withCognitoHUI = (WrappedComponent = null, inAmplifyConfig = null, inMode 
 
 
       // If we are ready to login, go to the Hosted UI (if mode === 'timer'), or display the
-      // Sign In button (if mode === 'button').
+      // Sign In button and the UnsecuredComponent (if mode === 'button').
       // If mode === 'button' this is where we would display the unprotected content
       let whichLoginConfig;
       if (inMode === 'timer') {
         whichLoginConfig = <div className="cognitoHocLoading">{this.loadingOverlay}</div>;
       } else { // proceed on the basis of the default === 'button'
-        whichLoginConfig = <div className="cognitoHocLogin">{this.signInButton()}</div>;
+        whichLoginConfig = <div className="cognitoHocLogin">
+          {this.signInButton()}
+          <UnsecuredComponent authStorageInfo={authStorageInfo} {...wrappedComponentProps} />
+        </div>;
       }
       this.headedToLoginDiv = whichLoginConfig;
     }
@@ -305,7 +308,9 @@ const withCognitoHUI = (WrappedComponent = null, inAmplifyConfig = null, inMode 
     }
 
 
-    signOutButton() { return (<button type="button" className="cognitoHocSignOutButton" onClick={() => this.signOut()}>Sign Out</button>); }
+    signOutButton() {
+      return (<button type="button" className="cognitoHocSignOutButton" onClick={() => this.signOut()}>Sign Out</button>);
+    }
 
 
     render() {
