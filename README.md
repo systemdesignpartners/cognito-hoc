@@ -3,7 +3,7 @@ Higher Order Component for ReactJS that provides Authentication via the Cognito 
 
 
 ## Usage
-The withCognitoHUI component can be used to wrap a React <App> component with an Authentication component that uses the AWS Cognito Hosted UI, and handles all typical Authorization flows including for Social Providers such as Google and Facebook. The <App> must be aware of the prop provided by withCognitoHUI, and respect it when rendering. To use withCognitoHUI, set up a Cognito backend first. For a discussion on how to do that, see:
+The withCognitoHUI component can be used to wrap a React <App> component with Authentication features that use the AWS Cognito Hosted UI, and handle all typical Authorization flows including for Social Providers such as Google and Facebook. The <App> must be aware of the prop provided by withCognitoHUI, and respect it when rendering. To use withCognitoHUI, set up a Cognito backend first. For a discussion on how to do that, see:
 
 https://www.sdpartners.com/blog/cognito-hoc
 
@@ -31,7 +31,7 @@ The withCognitoHUI component passes an all-important prop, **userIsLoggedIn**, w
 
 ## Details
 
-This HOC assumes the use of the Cognito Hosted UI with User Pool-based Federation. This approach to Federation using Cognito and Amplify allows Amplify to automatically handle the Authentication flows for supported external Social Providers, as well as for Cognito User Pools.  There is no need to use Cognito Identity Pools, and Cognito creates a linked user in its User Pool to represent any Socially Federated users.  In your JS, the Amplify.Auth API facilitates automated handling og all Authentication flows such as Token refresh, Sign Up, Sign In, etc.
+This HOC assumes the use of the Cognito Hosted UI with User Pool-based Federation. This approach to Federation using Cognito and Amplify allows the developer to automatically handle the Authentication flows for supported external Social Providers, as well as for Cognito User Pools.  There is no need to use Cognito Identity Pools, and Cognito creates a linked user in its User Pool to represent any Socially Federated users.  In your JS, the Amplify.Auth API facilitates automate handling of all Authentication flows such as Token refresh, Sign Up, Sign In, etc.
 
 ### Available HOC Parameters
 
