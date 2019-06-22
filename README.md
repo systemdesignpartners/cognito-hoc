@@ -3,16 +3,15 @@ Higher Order Component for ReactJS that provides Authentication via the Cognito 
 
 
 ## Usage
-The withCognitoHUI component can be used to wrap a typical React <App> component with an Authentication component that uses the AWS Cognito Hosted UI, and handles all typical Authorization flows including for Social Providers such as Google and Facebook. You must set up your AWS Cognito backend first. See
+The withCognitoHUI component can be used to wrap a React <App> component with an Authentication component that uses the AWS Cognito Hosted UI, and handles all typical Authorization flows including for Social Providers such as Google and Facebook. The <App> must be aware of the prop provided by withCognitoHUI, and respect it when rendering. To use withCognitoHUI, set up a Cognito backend first. For a discussion on how to do that, see:
 
-**TBD HYPERLINK TO SDPARTNERS.COM ARTICLE**
+https://www.sdpartners.com/blog/cognito-hoc
 
-for a discussion on how to do that.
 
 Typical usage in the frontend is within App.js:
 ```javascript
 ...
-import {withCognitoHUI} from 'cognito-auth-storage';
+import {withCognitoHUI} from 'cognito-hoc';
 ...
 
 class MyApp extends React.Component {
@@ -27,12 +26,12 @@ And then index.js remains the usual:
 ReactDOM.render(<MyApp myProp1="TestProp1" myProp2="Test Prop 2" />, document.getElementById('root'));
 ```
 
-The withCognitoHUI component passes an all-important prop, **userIsLoggedIn**, which when 'true' (a string) indicates that it is safe for the wrapped component (MyApp) to display the protected content. At all other times, it is not safe to display protected content because the user is not Authenticated.
+The withCognitoHUI component passes an all-important prop, **userIsLoggedIn**, which when 'true' (a string) indicates that it is safe for the wrapped component (MyApp) to display the protected content. At all other times, it is not safe to display protected content, because the user is not Authenticated.
 
 
 ## Details
 
-This HOC wraps the withOAuth HOC of Cognito, allowing use of the Hosted UI with User Pool-based Federation. This approach to Federation using Cognito and Amplify allows Amplify to automatically handle Authentication flows for supported external Social Providers, as well as Cognito User Pools.  There is no need to use Cognito Identity Pools, and Cognito creates a linked user in its User Pool to represent any Social Federated users.  In your JS, Amplify.Auth then automatically handles all Authentication flows such as Token refresh, Sign Up, Sign In, etc.
+This HOC assumes the use of the Cognito Hosted UI with User Pool-based Federation. This approach to Federation using Cognito and Amplify allows Amplify to automatically handle the Authentication flows for supported external Social Providers, as well as for Cognito User Pools.  There is no need to use Cognito Identity Pools, and Cognito creates a linked user in its User Pool to represent any Socially Federated users.  In your JS, the Amplify.Auth API facilitates automated handling og all Authentication flows such as Token refresh, Sign Up, Sign In, etc.
 
 ### Available HOC Parameters
 
@@ -56,15 +55,17 @@ The inMode property refers to the behavior of the HOC control when state indicat
 
 The 'button' mode means that in such cases, we will require the User to manually click a button to reach the Hosted UI login screen. Typically a wrapped component will render unprotected content when the User is not logged in.
 
-The 'timer' mode means that in such cases, we will wait for a certain time before automatically redirecting the User to the Hosted UI. Typically the wrapped component will have no unprotected content to display, though a brief splash screen might be useful. The wait time is needed because as of mid-2019, Amplify cannot immediately detect that the User has successfully logged in (this happens not only for Social providers but for Cognito User Pools as well). Thus without requiring a 'button', there is no feasible way to redirect the User to the Hosted UI without risking the chance that he or she is already logged in, hence creating an "infinite UI loop" where a User logs in, and then is again redirected to the Hosted UI. This time delay (implemented via Amplify Hub, which is the preferred way to interact with the Hosted UI), is usually between 700-800 ms on a typical network connection. The wait in milliseconds is configured via the inDelay property of this HOC. The default is around 1500ms. It is worth noting that if the default is exceeded, the infinite UI looping will occur for as long as that condition persists, so be conservative in adjusting this.
+The 'timer' mode means that in such cases, we will wait for a certain time before automatically redirecting the User to the Hosted UI. Typically the wrapped component will have no unprotected content to display. The wait time is needed because Amplify cannot immediately detect that the User has successfully logged in (this happens not only for Social providers but for Cognito User Pools as well). Thus without requiring a 'button', there is no feasible way to redirect the User to the Hosted UI without risking the chance that he or she is already logged in, hence creating an "infinite UI loop" where a User logs in, and then is again redirected to the Hosted UI. This time delay is usually between 700-800 ms on a typical network connection. The wait in milliseconds is configured via the *inDelay* property of the HOC. The default is around 1500ms. It is worth noting that if the default is exceeded, the infinite UI looping will occur for as long as that condition persists, so be conservative in adjusting this. 800ms is usually safe, but not always.
 
-Typically, 'button' mode is fine for apps with meaningful unprotected content. For such apps, the UX of having to click another button before being redirected to a proper Sign Up / Sign In page is not uncommon. However for apps that need to Authenticate the User immediately, the 'button' UX is probably more annoying than the 'timer' UX.
+Typically, 'button' mode is fine for apps with meaningful unprotected content. For such apps, the UX of having to click another button before being redirected to a proper Sign Up / Sign In page is common. However for apps that need to Authenticate the User before doing anything, the 'button' UX is less desirable than the 'timer' UX.
 
-With the Cognito Hosted UI, your app is technically not an SPA any longer, but only momentarily. The look and feel of the Hosted UI is configurable and its use offloads a ton of the gruntwork required to support robust Authentication flows.  
+With the Cognito Hosted UI, your app is technically not an SPA any longer, but only during Authentication. The look and feel of the Hosted UI is configurable and its use offloads a ton of the gruntwork required to support robust Authentication flows.
 
 
 ## Notes
 As of this writing (mid-2019), the aws-amplify package is huge, and it is pointless to use the smaller scoped packages (i.e., @aws-amplify/auth) because we also need aws-amplify-react, which itself does not use the scoped packages. The Amplify team is working on that with an RFC and it is likely that by the time you read this, the aws-amplify library will be ES6-modularized, so that Webpack 4 tree-shaking will slim down your production bundles automatically even without using the scoped packages.
 
-This component is aware of three different classes that can be used for backing stores for the Cognito Auth configuration object: the default store (where the config's Auth.storage property does not exist), the AuthStorageMemory.js class, and the AuthStorageIDB.js class (the latter two from the npm cognito-auth-storage package). The first two need no special handling, so this component need not import them. However AuthStorageIDB needs special handling on instantiation, so this project must install the cognito-auth-storage package so it can import AuthStorageIDB from it.
+The HOC is aware of three different classes that can be used for backing stores for the Cognito Auth configuration object: the default store (where the config's Auth.storage property does not exist), the AuthStorageMemory.js class, and the AuthStorageIDB.js class (the latter two from the https://www.npmjs.com/package/cognito-auth-storage package). The first two need no special handling, so this component need not import them. However AuthStorageIDB needs special handling on instantiation, so this project must install the cognito-auth-storage package so it can import AuthStorageIDB from it.
+
+For a full set of examples on how to use the HOC, see https://www.npmjs.com/package/cognito-hoc-examples
 
