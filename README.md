@@ -67,5 +67,4 @@ As of this writing (mid-2019), the aws-amplify package is huge, and it is pointl
 
 The HOC is aware of three different classes that can be used for backing stores for the Cognito Auth configuration object: the default store (where the config's Auth.storage property does not exist), the AuthStorageMemory.js class, and the AuthStorageIDB.js class (the latter two from the https://www.npmjs.com/package/cognito-auth-storage package). The first two need no special handling, so this component need not import them. However AuthStorageIDB needs special handling on instantiation, so this project must install the cognito-auth-storage package so it can import AuthStorageIDB from it.
 
-For a full set of examples on how to use the HOC, see https://www.npmjs.com/package/cognito-hoc-examples
-
+For a full set of examples on how to use the HOC, clone the repo at https://github.com/systemdesignpartners/cognito-hoc-examples
