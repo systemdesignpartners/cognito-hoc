@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Amplify, { Auth, Hub } from 'aws-amplify';
 import { withOAuth } from 'aws-amplify-react';
 import ReactLoadingOverlay from 'react-loading-overlay';
-import { AuthStorageIDB } from '@systemdesignpartners/cognito-auth-storage';
+import { AuthStorageIDB } from 'cognito-auth-storage';
 
 
 const withCognitoHUI = (WrappedComponent = null, inAmplifyConfig = null, inMode = 'button', inDelay = 1500) => {
