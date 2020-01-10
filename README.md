@@ -3,7 +3,7 @@ Higher Order Component for ReactJS that provides Authentication via the Cognito 
 
 
 ## Usage
-The withCognitoHUI component can be used to wrap a React <App> component with Authentication features that use the AWS Cognito Hosted UI, and handle all typical Authorization flows including for Social Providers such as Google and Facebook. The <App> must be aware of the prop provided by withCognitoHUI, and respect it when rendering. To use withCognitoHUI, set up a Cognito backend first. For a discussion on how to do that, see:
+The withCognitoHUI component can be used to wrap a React <App> component with Authentication features that use the AWS Cognito Hosted UI, and handle all typical Authorization flows including for Social Providers such as Google and Facebook. The app must be aware of the prop provided by withCognitoHUI, and respect it when rendering. To use withCognitoHUI, set up a Cognito backend first. For a discussion on how to do that, see:
 
 https://www.sdpartners.com/blog/cognito-hoc
 
